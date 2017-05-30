@@ -1,0 +1,57 @@
+{% extends "monocle_cms/base.html" %}
+{% block maincontainer %}
+<div id="maincontainer" class="col-xs-12                 col-sm-10 col-sm-offset-1
+                               col-md-10 col-md-offset-1 col-lg-9 col-lg-offset-2">
+    <!-- Main content -->
+    <div id="main" class="col-xs-12 col-sm-12 col-md-10">
+        {% block main %}
+        {% endblock %}
+    </div>
+    <!-- Sidebar -->
+    <div id="side" class="hidden-xs hidden-sm col-md-2">
+        {% ifequal language 'de' %}
+            <div class="row"><h4>Vorgestellte Projekte</h4></div>
+        {% else %}
+            <div class="row"><h4>Featured Projects</h4></div>
+        {% endifequal %}
+        {% for project in featured_projects %}
+            <div class="row"><h5><a href="/{{project.0}}/{{language}}/">{{project.1}}</a></h5></div>
+        {% endfor %}
+
+        <div class="row"><h4>Social Media</h4></div>
+        <div class="row"><h5><a href="https://github.com/monoclecat">Github</a></h5></div>
+        <div class="row"><h5><a href="https://www.youtube.com/c/TheMonoclecat">Youtube</a></h5></div>
+        <div class="row"><h5><a href="https://www.instructables.com/member/Candymanproductions">Instructables</a></h5></div>
+        <div class="row"><h5><a href="https://plus.google.com/+TheMonoclecat/">Google+</a></h5></div>
+
+        {% ifequal language 'de' %}
+            <div class="row"><h4>Andere Projekte</h4></div>
+        {% else %}
+            <div class="row"><h4>Other Projects</h4></div>
+        {% endifequal %}
+        {% for project in other_projects %}
+            <div class="row"><h5><a href="/{{project.0}}/{{language}}/">{{project.1}}</a></h5></div>
+        {% endfor %}
+        <div class="row"><h4>Meta<h4></div>
+        <div class="row"><h5><a href="/impressum">Impressum</a></h5></div>
+        {% if request.user.is_superuser %}
+            <div class="row"><h5><a href="{% url 'monocle_cms:image_upload' %}">Image Upload</a></h5></div>
+            <form class="form-inline" action="{% url 'monocle_cms:logout' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="submitted_from" value="{{ request.path }}">
+                <input type="submit" class="btn btn-default" value="Logout"/>
+            </form>
+        {% else %}
+            <div class="row"><h5><a href="{% url 'monocle_cms:login' %}">Login</a></h5></div>
+        {% endif %}
+
+    </div>
+    <script>
+        var elem = document.getElementById('maincontainer');
+        var containerHeight = elem.offsetHeight;
+        var lastChild = elem.childNodes[elem.childNodes.length - 1];
+        var verticalOffset = lastChild.offsetTop + lastChild.offsetHeight;
+        document.getElementById('side').style.height = (containerHeight - verticalOffset) + "px";
+    </script>
+</div>
+{% endblock %}

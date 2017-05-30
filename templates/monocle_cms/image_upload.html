@@ -1,0 +1,38 @@
+{% extends "monocle_cms/main_no_sidebar.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Image Upload - Monoclecat
+{% endblock %}
+
+{% block main %}
+    <h1>Image Upload</h1>
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <form class="form-horizontal" style="padding: 2em"
+          action="{% url 'monocle_cms:image_upload' %}" method="post" enctype="multipart/form-data">
+        {% crispy form %}
+    </form>
+
+    {% regroup images by tag as images_tag_grouped %}
+
+    {% for tag in images_tag_grouped %}
+        <div style="padding: 0.5em; background-color: {% cycle '#f2f2f2' '#ffffff' %}">
+            {% ifequal tag.grouper "" %}
+                <h4>No tag</h4>
+            {% else %}
+                <h4>{{ tag.grouper }}</h4>
+            {% endifequal %}
+            <div class="row" style="padding: 0.5em">
+            {% for image in tag.list %}
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="{{ image.file.url }}"><img src="{{ image.file.medium.url }}" class="img-responsive" ></a>
+                    <h5>Primary key: {{ image.pk }}</h5>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+{%  endblock %}

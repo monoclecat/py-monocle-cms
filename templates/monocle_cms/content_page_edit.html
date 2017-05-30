@@ -1,0 +1,19 @@
+{% extends "monocle_cms/main_with_sidebar.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+{{ content.headline }} - Monoclecat
+{% endblock %}
+
+{% block main %}
+    <h1>Edit page</h1>
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <form class="bootstrap3" action="{% url 'monocle_cms:content_no_slug' content.language page.id %}" method="post">
+        {% crispy form %}
+
+        {{ html_content_body|safe }}
+    </form>
+
+{%  endblock %}

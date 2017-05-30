@@ -1,0 +1,8 @@
+# MEDIA directory
+media/*
+
+# Python cache
+__pycache__/*
+
+# Database migrations
+migrations/

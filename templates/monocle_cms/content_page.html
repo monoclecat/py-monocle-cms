@@ -1,0 +1,14 @@
+{% extends "monocle_cms/main_with_sidebar.html" %}
+
+{% block title %}
+{{ content.headline }} - Monoclecat
+{% endblock %}
+
+{% block main %}
+
+    <h1>{{ content.headline }}</h1>
+    <p>
+    {{ content.body|safe }}
+    </p>
+
+{%  endblock %}

@@ -1,0 +1,113 @@
+body {
+    min-width: 400px;
+    max-width: 100%;
+    overflow-x: hidden;
+    background-color: rgba(62,62,132,0.1) !important;
+
+}
+
+#header-wrapper {
+    background:  url(/static/background.png) no-repeat;
+    background-size: cover;
+}
+
+.asteriskField {
+    display: none;
+}
+
+#maincontainer {
+    border-width: 1px;
+    border-style: none solid solid solid;
+    border-color: rgba(62,62,132,0.4);
+    padding: 0px;
+    background-color: #ffffff;
+}
+
+/* -------------------- MAIN ---------------------*/
+
+#main {
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.row_image {
+    display: inline-block;
+    float: left;
+    margin: 0.5em;
+}
+
+.single_image {
+    display: block;
+    margin: auto;
+    padding: 1em;
+}
+
+#main .image_div {
+    margin: 2em 1em;
+}
+
+/* -------------------- LOGO ---------------------*/
+#logo {
+    padding: 1em;
+    display: inline-block;
+    margin: 2em;
+    background-color: rgba(62,62,132, 0.9);
+}
+#logo:hover {
+    background-color: rgba(62,62,132, 1);
+}
+#logo h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    margin: 0;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0px;
+    font-size: 3.5em;
+}
+#logo p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    padding: 0px;
+    letter-spacing: 0.1em;
+    text-transform: none;
+    color: rgba(255,255,255,0.5);
+}
+#logo a:hover {
+    text-decoration: none;
+}
+
+/* -------------------- MENU ---------------------*/
+#menu {
+  background-color: rgba(62,62,132, 0.9);
+}
+
+#menu a {
+	display: block;
+	line-height: 40px;
+	letter-spacing: 1px;
+	text-decoration: none;
+	text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+	font-size: 15px;
+	color: rgba(255,255,255,0.7);
+}
+#menu a:hover {
+	color: rgba(255,255,255,1);
+}
+
+/* -------------------- SIDEBAR ---------------------*/
+#side {
+    background-color: rgba(62,62,132,0.05);
+    height: 100%;
+    padding: 0px 20px 20px 10px; /*top right bottom left*/
+}
+#side h4 {
+    margin-left: 10px;
+}
+#side h5 {
+    margin: 3px 0px 3px 20px; /*top right bottom left*/
+}
+#side a {
+    color: rgba(62,62,132,0.8);
+}
