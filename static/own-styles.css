@@ -46,6 +46,20 @@ body {
     margin: 2em 1em;
 }
 
+.image_gallery {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+    flex-wrap: wrap;
+}
+
+.image_gallery [class*="col-"] {
+    display: flex;
+    flex-direction: column;
+}
+
+
 /* -------------------- LOGO ---------------------*/
 #logo {
     padding: 1em;

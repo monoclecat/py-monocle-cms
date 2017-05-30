@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect, render_to_resp
 from django.http import HttpResponseRedirect, HttpRequest, Http404
 from django.urls import reverse
 from django.views.generic.list import ListView
+from django.views.generic import DetailView
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -47,8 +48,8 @@ def logout_view(request):
 
 class ImageUploadView(FormView):
     form_class = ImageUploadForm
-    template_name = 'monocle_cms/image_upload.html'  # Replace with your template.
-    success_url = '/image-upload' # Replace with your URL or reverse().
+    template_name = 'monocle_cms/image_upload.html'
+    success_url = '/image-upload'
 
     def get_context_data(self, **kwargs):
         context = super(ImageUploadView, self).get_context_data(**kwargs)
@@ -68,101 +69,107 @@ class ImageUploadView(FormView):
             return self.form_invalid(form)
 
 
-def content_view(request, language, page_pk, slug=None):
-    if request.method == 'POST' and request.user.is_superuser:
-        try:
-            page = Page.objects.get(pk=page_pk)
-            page_form = PageEditForm(request.POST, instance=page)
-            try:
-                page = page_form.save()
-            except ValueError:
-                raise Exception #TODO add handler
-        except Page.DoesNotExist:
-            page_form = PageEditForm(request.POST)
-            try:
-                page = page_form.save()
-            except ValueError:
-                raise Exception  # TODO add handler
+class ContentView(DetailView):
+    model = Page
+    template_name = 'monocle_cms/page.html'
+    context_object_name = 'page'
 
-        if language == 'de':
-            content = Content.objects.get(pk=page.content_de_id)
-        else:
-            content = Content.objects.get(pk=page.content_en_id)
-        content.name = request.POST['name']
-        content.headline = request.POST['headline']
-        content.abstract = request.POST['abstract']
-        content.body = request.POST['body']
-        content.save()
-
-        return HttpResponseRedirect(reverse('monocle_cms:content_slug',
-                                            args=[language, page_pk, page.slug(language)]))
-    else:
-        # first get the object
-        if request.user.is_superuser:
-            try:
-                page = Page.objects.get(pk=page_pk)
-            except Page.DoesNotExist:
-                page = Page.objects.create()
-                return HttpResponseRedirect(reverse('monocle_cms:content_no_slug',
-                                                    args=[language, page.pk]))
-        else:
-            page = get_object_or_404(Page, pk=page_pk)
-
-        if page.admin_only and not request.user.is_superuser:
+    def get_object(self, queryset=None):
+        page = super(ContentView, self).get_object()
+        if page.admin_only and not self.request.user.is_superuser:
             raise Http404
+        return page
 
-        if language != 'en' and language != 'de':
-            return redirect(page.get_absolute_url())
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(ContentView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
 
-        # Now we will check if the slug in url is same
-        # as my_object's slug or not
-        if slug != page.slug(language):
-            # either slug is wrong or None
-            return redirect(page.get_absolute_url(language))
+        context['content'], self.kwargs['language'] = context['page'].get_content(self.kwargs['language'])
 
-        featured_projects = []
-        other_projects = []
-        if request.user.is_superuser:
+        context['featured_projects'] = []
+        context['other_projects'] = []
+        if self.request.user.is_superuser:
             perm_filtered_query = Page.objects.all()
         else:
             perm_filtered_query = Page.objects.all().exclude(admin_only=True)
-
-        if language == 'de':
-            content = Content.objects.get(pk=page.content_de_id)
+        if self.kwargs['language'] == 'de':
             try:
                 for page in perm_filtered_query.filter(featured=True):
-                    featured_projects.append([page.pk, Content.objects.get(pk=page.content_de_id).name])
+                    context['featured_projects'].append([page.pk, Content.objects.get(pk=page.content_de_id).name])
                 for page in perm_filtered_query.filter(featured=False):
-                    other_projects.append([page.pk, Content.objects.get(pk=page.content_de_id).name])
+                    context['other_projects'].append([page.pk, Content.objects.get(pk=page.content_de_id).name])
             except Page.DoesNotExist:
                 pass
         else:
-            content = Content.objects.get(pk=page.content_en_id)
             try:
                 for page in perm_filtered_query.filter(featured=True):
-                    featured_projects.append([page.pk, Content.objects.get(pk=page.content_en_id).name])
+                    context['featured_projects'].append([page.pk, Content.objects.get(pk=page.content_en_id).name])
                 for page in perm_filtered_query.filter(featured=False):
-                    other_projects.append([page.pk, Content.objects.get(pk=page.content_en_id).name])
+                    context['other_projects'].append([page.pk, Content.objects.get(pk=page.content_en_id).name])
             except Page.DoesNotExist:
                 pass
 
-        form = PageEditForm(initial=
-                            {'tag': page.tag, 'created': page.created, 'admin_only': page.admin_only,
-                             'featured': page.featured, 'primary_image': page.primary_image,
-                             'other_images': page.other_images, 'name': content.name,
-                             'headline': content.headline, 'abstract': content.abstract,
-                             'body': content.body}, instance=page)
+        return context
 
-        md = markdown.Markdown(extensions=[PageBuildingExtensions()])
-        html = md.convert(content.body)
-        if request.user.is_superuser:
-            return render(request, 'monocle_cms/content_page_edit.html',
-                          {'page': page, 'content': content, 'form': form,
-                           'featured_projects': featured_projects, 'other_projects': other_projects,
-                           'language': language, 'html_content_body': html})
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+
+        if context['content'] is None or self.kwargs['slug'] != context['content'].slug():
+            # No content was found under the given language or slug was wrong
+            return redirect(context['page'].get_absolute_url(self.kwargs['language']))
+
+        return self.render_to_response(context)
+
+
+class ContentEditView(FormView, ContentView):
+    form_class = PageEditForm
+    template_name = 'monocle_cms/page_edit.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = ContentView.get_context_data(self, object=self.object)
+
+        self.initial = {'tag': context['page'].tag, 'created': context['page'].created,
+                        'admin_only': context['page'].admin_only,
+                        'featured': context['page'].featured, 'primary_image': context['page'].primary_image,
+                        'other_images': context['page'].other_images, 'name': context['content'].name,
+                        'headline': context['content'].headline, 'abstract': context['content'].abstract,
+                        'body': context['content'].body}
+
+        context = {**context, **FormView.get_context_data(self, **kwargs)}
+
+        if context['content'] is None or self.kwargs['slug'] != context['content'].slug():
+            # No content was found under the given language or slug was wrong
+            return redirect(context['page'].get_absolute_url(self.kwargs['language'], True))
+
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            page = Page.objects.get(pk=self.kwargs['pk'])
+            form = PageEditForm(request.POST, instance=page)
+            return self.form_valid(form)
         else:
-            content.body = html
-            return render(request, 'monocle_cms/content_page.html',
-                          {'page': page, 'content': content,
-                           'featured_projects': featured_projects, 'other_projects': other_projects,
-                           'language': language})
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, save the associated model.
+        """
+        self.object = form.save()
+
+        if self.kwargs['language'] == 'de':
+            content = Content.objects.get(pk=self.object.content_de_id)
+        else:
+            content = Content.objects.get(pk=self.object.content_en_id)
+        content.name = self.request.POST['name']
+        content.headline = self.request.POST['headline']
+        content.abstract = self.request.POST['abstract']
+        content.body = self.request.POST['body']
+        content.save()
+
+        self.success_url = self.object.get_absolute_url(self.kwargs['language'], True)
+        return super(ContentEditView, self).form_valid(form)

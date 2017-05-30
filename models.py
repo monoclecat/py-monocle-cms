@@ -10,14 +10,6 @@ from stdimage.models import StdImageField
 from stdimage.utils import UploadToClassNameDirUUID
 
 
-class Content(models.Model):
-    language = models.CharField(default=None, null=True, max_length=10)
-    name = models.CharField(default=None, null=True, max_length=30)
-    headline = models.CharField(default=None, null=True, max_length=100)
-    abstract = models.TextField()
-    body = models.TextField()
-
-
 class Image(models.Model):
     file = StdImageField(upload_to=UploadToClassNameDirUUID(), blank=True, variations={
         'large': {"height": 400},
@@ -26,6 +18,17 @@ class Image(models.Model):
     })
     tag = models.CharField(max_length=50)
     uploaded = models.DateField(auto_now_add=True)
+
+
+class Content(models.Model):
+    language = models.CharField(default=None, null=True, max_length=10)
+    name = models.CharField(default=None, null=True, max_length=30)
+    headline = models.CharField(default=None, null=True, max_length=100)
+    abstract = models.TextField()
+    body = models.TextField()
+
+    def slug(self):
+        return slugify(self.headline)
 
 
 class Page(models.Model):
@@ -54,19 +57,25 @@ class Page(models.Model):
         Content.objects.get(pk=self.content_en_id).delete()
         super(Page, self).delete(using=None, keep_parents=False)
 
-    def slug(self, language):
+    def get_content(self, language):
         if language == 'en':
-            to_slug = Content.objects.get(pk=self.content_en_id).headline
+            return [Content.objects.get(pk=self.content_en_id), language]
         elif language == 'de':
-            to_slug = Content.objects.get(pk=self.content_de_id).headline
+            return [Content.objects.get(pk=self.content_de_id), language]
+        else:
+            return [None, None]
+
+    def get_absolute_url(self, language='en', edit=False):
+        if language == 'en':
+            slug = Content.objects.get(pk=self.content_en_id).slug()
+        elif language == 'de':
+            slug = Content.objects.get(pk=self.content_de_id).slug()
         else:
             raise Exception
-        if to_slug == '':
-            to_slug = '-'
-        return slugify(to_slug)
-
-    def get_absolute_url(self, language='en'):
-        return reverse('monocle_cms:content_slug', args=[language, self.pk, self.slug(language)])
+        if edit:
+            return reverse('monocle_cms:page_edit', args=[language, self.pk, slug])
+        else:
+            return reverse('monocle_cms:page', args=[language, self.pk, slug])
 
 
 

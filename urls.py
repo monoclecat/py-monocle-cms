@@ -15,16 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url
 from . import views
+from monocle_cms.views import *
 
 from django.conf import settings
 from django.conf.urls.static import static
 
 app_name = 'monocle_cms'
 urlpatterns = [
-    url(r'^image-upload/', views.ImageUploadView.as_view(), name='image_upload'),
+    url(r'^image-upload/', ImageUploadView.as_view(), name='image_upload'),
     url(r'^logout/', views.logout_view, name='logout'),
     url(r'^login/', views.login_view, name='login'),
-    url(r'^(?P<language>\S+)/$', views.IndexView.as_view, name='content_no_slug'),
-    url(r'^(?P<language>\S+)/(?P<page_pk>\d+)/$', views.content_view, name='content_no_slug'),
-    url(r'^(?P<language>\S+)/(?P<page_pk>\d+)/(?P<slug>\S+)$', views.content_view, name='content_slug'),
+
+    url(r'^edit/(?P<language>\S+)/(?P<pk>\d+)/(?P<slug>\S*)$', login_required(ContentEditView.as_view()), name='page_edit'),
+    url(r'^(?P<language>\S+)/(?P<pk>\d+)/(?P<slug>\S+)$', ContentView.as_view(), name='page'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

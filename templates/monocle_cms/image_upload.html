@@ -24,9 +24,9 @@ Image Upload - Monoclecat
             {% else %}
                 <h4>{{ tag.grouper }}</h4>
             {% endifequal %}
-            <div class="row" style="padding: 0.5em">
+            <div class="row image_gallery" style="padding: 0.5em">
             {% for image in tag.list %}
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
                     <a href="{{ image.file.url }}"><img src="{{ image.file.medium.url }}" class="img-responsive" ></a>
                     <h5>Primary key: {{ image.pk }}</h5>
                 </div>
