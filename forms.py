@@ -2,8 +2,8 @@ from django import forms
 from django.forms import ModelForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout
-from crispy_forms.bootstrap import StrictButton, FormActions
-from django.utils import timezone
+from crispy_forms.bootstrap import FormActions
+from django.contrib.auth.forms import AuthenticationForm
 
 from .models import Page, Image
 

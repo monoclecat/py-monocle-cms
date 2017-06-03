@@ -15,7 +15,7 @@
             <div class="row"><h4>Featured Projects</h4></div>
         {% endifequal %}
         {% for project in featured_projects %}
-            <div class="row"><h5><a href="/{{project.0}}/{{language}}/">{{project.1}}</a></h5></div>
+            <div class="row"><h5><a href="/{{language}}/{{project.0}}/">{{project.1}}</a></h5></div>
         {% endfor %}
 
         <div class="row"><h4>Social Media</h4></div>
@@ -30,16 +30,17 @@
             <div class="row"><h4>Other Projects</h4></div>
         {% endifequal %}
         {% for project in other_projects %}
-            <div class="row"><h5><a href="/{{project.0}}/{{language}}/">{{project.1}}</a></h5></div>
+            <div class="row"><h5><a href="/{{language}}/{{project.0}}/">{{project.1}}</a></h5></div>
         {% endfor %}
+
         <div class="row"><h4>Meta<h4></div>
         <div class="row"><h5><a href="/impressum">Impressum</a></h5></div>
         {% if request.user.is_superuser %}
             <div class="row"><h5><a href="{% url 'monocle_cms:image_upload' %}">Image Upload</a></h5></div>
             <form class="form-inline" action="{% url 'monocle_cms:logout' %}" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="submitted_from" value="{{ request.path }}">
-                <input type="submit" class="btn btn-default" value="Logout"/>
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <input type="submit" name="logout" class="btn btn-default" value="Logout"/>
             </form>
         {% else %}
             <div class="row"><h5><a href="{% url 'monocle_cms:login' %}">Login</a></h5></div>

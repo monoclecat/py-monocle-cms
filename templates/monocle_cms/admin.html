@@ -1,0 +1,46 @@
+{% extends "monocle_cms/main_no_sidebar.html" %}
+
+{% block title %}
+Admin - Monoclecat
+{% endblock %}
+
+{% block main %}
+    <h1>Page list</h1>
+    <div class="row" style="margin: 1em">
+        <form class="form-inline" action="{% url 'monocle_cms:admin' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="/admin/">
+            <input type="submit" name="new page" class="btn btn-primary" value="Create new page"/>
+        </form>
+    </div>
+    {% for item in page %}
+        <div class="row same_height" style="background-color: {% cycle '#f2f2f2' '#ffffff' %}">
+            <div class="col-xs-2">
+                <h3>PK: {{ item.pk }}</h3>
+            </div>
+            <div class="col-xs-3">
+                <h4>Tag: {{ item.tag }}</h4>
+                <h4>Created: {{ item.created }}</h4>
+            </div>
+            {% if item.admin_only or item.featured %}
+            <div class="col-xs-3 col-md-2">
+                {% if item.admin_only %}
+                    <h4 class="text-warning">Admin only</h4>
+                {% endif %}
+                {% if item.featured %}
+                    <h4 class="text-success">Featured</h4>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% for content in item.content.all %}
+                <div class="col-xs-6 col-sm-4 col-md-3" style="padding: 1em; text-overflow: clip">
+                    <a href="/{{ content.language }}/{{ item.pk }}/" class="btn btn-default btn-lg btn-block"
+                       role="button" target="_blank">
+                    <h6>{{ content.name|truncatechars:13 }} <i>Lang:{{ content.language|truncatechars:2 }}</i></h6>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+{%  endblock %}

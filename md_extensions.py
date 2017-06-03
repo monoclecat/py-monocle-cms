@@ -28,19 +28,19 @@ class PackImagesIntoContainers(Treeprocessor):
                     image_node[0][0].attrib["class"] = "img-responsive single_image"
                     tree_part = deepcopy(row_div)
                     tree_part.append(image_node[0])
-                    if "title" in image_node[0].attrib:
+                    if "title" in image_node[0][0].attrib:
                         subtext = etree.Element("p")
                         etree.SubElement(subtext, "i")
-                        subtext[0].text = image_node[0].attrib["title"]
+                        subtext[0].text = image_node[0][0].attrib["title"]
                         subtext.attrib["style"] = "text-align: center;"
                         tree_part.append(subtext)
                 else:
                     if len(list(image_node)) == 2:
                         col_class = ["col-xs-6 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4",
                                     "col-xs-6 col-sm-4 col-md-4 col-lg-4"]
-                    elif len(list(image_node)) == 2:
-                        col_class = ["col-xs-6 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4",
-                                     "col-xs-6 col-sm-4 col-md-4 col-lg-4"]
+                    elif len(list(image_node)) == 3:
+                        col_class = ["col-xs-4 col-sm-4 col-md-4 col-lg-4",
+                                     "col-xs-4 col-sm-4 col-md-4 col-lg-4", "col-xs-4 col-sm-4 col-md-4 col-lg-4"]
                     else:
                         col_class = []
                         for i in range(0, len(list(image_node))):

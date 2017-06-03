@@ -1,10 +1,7 @@
-import os
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.utils.text import slugify
-from django.conf import settings
-from django.conf.urls.static import static
 
 from stdimage.models import StdImageField
 from stdimage.utils import UploadToClassNameDirUUID
@@ -32,52 +29,44 @@ class Content(models.Model):
 
 
 class Page(models.Model):
+    languages = ['en', 'de']
+
     tag = models.CharField(max_length=50)
     created = models.DateField(default=timezone.now)
     admin_only = models.BooleanField(default=False)
     featured = models.BooleanField(default=False)
     primary_image = models.IntegerField(default=None, null=True)
     other_images = models.IntegerField(default=None, null=True)
-    content_de = models.ForeignKey(Content, default=None, related_name='page_de', null=True, blank=True)
-    content_en = models.ForeignKey(Content, default=None, related_name='page_en', null=True, blank=True)
+    content = models.ManyToManyField(Content, default=None)
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            # This code only happens if the objects is
-            # not in the database yet. Otherwise it would
-            # have pk
-            new_ger = Content.objects.create(language='de')
-            new_eng = Content.objects.create(language='en')
-            self.content_en_id = new_eng.pk
-            self.content_de_id = new_ger.pk
-        super(Page, self).save(*args, **kwargs)
+            super(Page, self).save(*args, **kwargs)
+
+            for language in self.languages:
+                new_content = Content.objects.create(language=language)
+                self.content.add(new_content)
+        else:
+            super(Page, self).save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
-        Content.objects.get(pk=self.content_de_id).delete()
-        Content.objects.get(pk=self.content_en_id).delete()
+        for content in self.content.all():
+            content.delete()
         super(Page, self).delete(using=None, keep_parents=False)
 
     def get_content(self, language):
-        if language == 'en':
-            return [Content.objects.get(pk=self.content_en_id), language]
-        elif language == 'de':
-            return [Content.objects.get(pk=self.content_de_id), language]
-        else:
+        try:
+            content = self.content.get(language=language)
+            return [content, language]
+        except Content.DoesNotExist:
             return [None, None]
 
     def get_absolute_url(self, language='en', edit=False):
-        if language == 'en':
-            slug = Content.objects.get(pk=self.content_en_id).slug()
-        elif language == 'de':
-            slug = Content.objects.get(pk=self.content_de_id).slug()
-        else:
-            raise Exception
+        try:
+            slug = self.content.get(language=language).slug()
+        except Content.DoesNotExist:
+            slug = ''
         if edit:
             return reverse('monocle_cms:page_edit', args=[language, self.pk, slug])
         else:
             return reverse('monocle_cms:page', args=[language, self.pk, slug])
-
-
-
-
-

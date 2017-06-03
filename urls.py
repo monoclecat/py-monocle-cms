@@ -23,9 +23,10 @@ from django.conf.urls.static import static
 app_name = 'monocle_cms'
 urlpatterns = [
     url(r'^image-upload/', ImageUploadView.as_view(), name='image_upload'),
-    url(r'^logout/', views.logout_view, name='logout'),
+    url(r'^logout/', views.login_view, name='logout'),
     url(r'^login/', views.login_view, name='login'),
+    url(r'^admin/', AdminView.as_view(), name='admin'),
 
-    url(r'^edit/(?P<language>\S+)/(?P<pk>\d+)/(?P<slug>\S*)$', login_required(ContentEditView.as_view()), name='page_edit'),
-    url(r'^(?P<language>\S+)/(?P<pk>\d+)/(?P<slug>\S+)$', ContentView.as_view(), name='page'),
+    url(r'^edit/(?P<language>\S+)/(?P<pk>\d+)/(?P<slug>\S*)$', ContentEditView.as_view(), name='page_edit'),
+    url(r'^(?P<language>\S+)/(?P<pk>\d+)/(?P<slug>\S*)$', ContentView.as_view(), name='page'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
