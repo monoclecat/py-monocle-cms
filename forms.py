@@ -3,7 +3,6 @@ from django.forms import ModelForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout
 from crispy_forms.bootstrap import FormActions
-from django.contrib.auth.forms import AuthenticationForm
 
 from .models import Page, Image
 
@@ -33,14 +32,11 @@ class ImageUploadForm(forms.Form):
 class PageEditForm(ModelForm):
     class Meta:
         model = Page
-        fields = ['tag', 'created', 'admin_only', 'featured', 'primary_image', 'other_images', 'name', 'headline',
-                  'abstract', 'body']
+        fields = ['tag', 'created', 'admin_only', 'featured', 'name', 'headline', 'abstract', 'body']
     tag = forms.CharField(label='Tag', max_length=50, required=False)
     created = forms.DateField(label='Created', required=False)
     admin_only = forms.BooleanField(label='Admin only', required=False)
     featured = forms.BooleanField(label='Featured', required=False)
-    primary_image = forms.IntegerField(required=False)
-    other_images = forms.IntegerField(required=False)
     name = forms.CharField(label='Name', max_length=50, required=False)
     headline = forms.CharField(label='Headline (gets slugged)', max_length=100, required=False)
     abstract = forms.CharField(label='Abstract', widget=forms.Textarea, required=False)
@@ -53,14 +49,12 @@ class PageEditForm(ModelForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.form_method = 'post'
         self.helper.form_action = 'save_page'
+
         self.helper.layout = Layout(
-            FormActions(Submit('save', 'Save')),
             'tag',
             'created',
             'admin_only',
             'featured',
-            'primary_image',
-            'other_images',
             'name',
             'headline',
             'abstract',

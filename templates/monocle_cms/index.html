@@ -1,0 +1,17 @@
+{% extends "monocle_cms/main_with_sidebar.html" %}
+{% load monocle_cms_tags %}
+
+{% block title %}
+Electronics and Programming projects - Monoclecat
+{% endblock %}
+
+{% block main %}
+    {% for item in page %}
+        {% for content in item.content.all %}
+            {% ifequal content.language language %}
+                <h1 id="{{ item.pk }}">{{ content.headline }}</h1>
+                {{ content.body|from_markdown|safe }}
+            {% endifequal %}
+        {% endfor %}
+    {% endfor %}
+{%  endblock %}

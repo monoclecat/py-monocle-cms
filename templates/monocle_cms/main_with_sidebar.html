@@ -30,17 +30,24 @@
             <div class="row"><h4>Other Projects</h4></div>
         {% endifequal %}
         {% for project in other_projects %}
-            <div class="row"><h5><a href="/{{language}}/{{project.0}}/">{{project.1}}</a></h5></div>
+            <!--div class="row"><h5><a href="/{{language}}/{{project.0}}/">{{project.1}}</a></h5></div-->
+            <div class="row"><h5><a href="/{{language}}/#{{project.0}}">{{project.1}}</a></h5></div>
         {% endfor %}
 
         <div class="row"><h4>Meta<h4></div>
-        <div class="row"><h5><a href="/impressum">Impressum</a></h5></div>
+        {% ifequal language 'de' %}
+            <div class="row"><h5><a href="{% url 'monocle_cms:impressum-de' %}">Impressum</a></h5></div>
+        {% else %}
+            <div class="row"><h5><a href="{% url 'monocle_cms:impressum-en' %}">Imprint</a></h5></div>
+        {% endifequal %}
+
         {% if request.user.is_superuser %}
             <div class="row"><h5><a href="{% url 'monocle_cms:image_upload' %}">Image Upload</a></h5></div>
             <form class="form-inline" action="{% url 'monocle_cms:logout' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
-                <input type="submit" name="logout" class="btn btn-default" value="Logout"/>
+                <input type="submit" name="logout" class="btn btn-default" value="Logout"
+                style="padding: 0.5em; margin: 4px;"/>
             </form>
         {% else %}
             <div class="row"><h5><a href="{% url 'monocle_cms:login' %}">Login</a></h5></div>

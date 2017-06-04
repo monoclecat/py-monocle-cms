@@ -35,14 +35,11 @@ class Page(models.Model):
     created = models.DateField(default=timezone.now)
     admin_only = models.BooleanField(default=False)
     featured = models.BooleanField(default=False)
-    primary_image = models.IntegerField(default=None, null=True)
-    other_images = models.IntegerField(default=None, null=True)
     content = models.ManyToManyField(Content, default=None)
 
     def save(self, *args, **kwargs):
         if not self.pk:
             super(Page, self).save(*args, **kwargs)
-
             for language in self.languages:
                 new_content = Content.objects.create(language=language)
                 self.content.add(new_content)
@@ -54,19 +51,12 @@ class Page(models.Model):
             content.delete()
         super(Page, self).delete(using=None, keep_parents=False)
 
-    def get_content(self, language):
-        try:
-            content = self.content.get(language=language)
-            return [content, language]
-        except Content.DoesNotExist:
-            return [None, None]
-
-    def get_absolute_url(self, language='en', edit=False):
+    def get_absolute_url(self, language=languages[0], edit=False):
         try:
             slug = self.content.get(language=language).slug()
         except Content.DoesNotExist:
             slug = ''
         if edit:
-            return reverse('monocle_cms:page_edit', args=[language, self.pk, slug])
+            return reverse('monocle_cms:content_edit', args=[language, self.pk, slug])
         else:
-            return reverse('monocle_cms:page', args=[language, self.pk, slug])
+            return reverse('monocle_cms:content', args=[language, self.pk, slug])

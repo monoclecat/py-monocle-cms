@@ -10,20 +10,25 @@ Admin - Monoclecat
         <form class="form-inline" action="{% url 'monocle_cms:admin' %}" method="post">
             {% csrf_token %}
             <input type="hidden" name="next" value="/admin/">
-            <input type="submit" name="new page" class="btn btn-primary" value="Create new page"/>
+            <input type="submit" name="new" class="btn btn-primary" value="Create new page"/>
         </form>
     </div>
     {% for item in page %}
         <div class="row same_height" style="background-color: {% cycle '#f2f2f2' '#ffffff' %}">
             <div class="col-xs-2">
                 <h3>PK: {{ item.pk }}</h3>
+                <form class="form-inline" action="{% url 'monocle_cms:admin' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="pk" value="{{ item.pk }}">
+                    <input type="submit" name="delete" class="btn btn-default btn-xs" value="Delete"/>
+                </form>
             </div>
-            <div class="col-xs-3">
-                <h4>Tag: {{ item.tag }}</h4>
-                <h4>Created: {{ item.created }}</h4>
+            <div class="col-xs-2 col-sm-2">
+                <h5>Tag: {{ item.tag }}</h5>
+                <h5>Created: {{ item.created }}</h5>
             </div>
             {% if item.admin_only or item.featured %}
-            <div class="col-xs-3 col-md-2">
+            <div class="col-xs-2 col-md-2">
                 {% if item.admin_only %}
                     <h4 class="text-warning">Admin only</h4>
                 {% endif %}

@@ -64,7 +64,6 @@ body {
 #logo {
     padding: 1em;
     display: inline-block;
-    margin: 2em;
     background-color: rgba(62,62,132, 0.9);
 }
 #logo:hover {
