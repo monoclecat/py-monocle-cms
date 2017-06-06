@@ -14,7 +14,7 @@
         {% else %}
             <div class="row"><h4>Featured Projects</h4></div>
         {% endifequal %}
-        {% for project in featured_projects %}
+        {% for project in featured_pages %}
             <div class="row"><h5><a href="/{{language}}/{{project.0}}/">{{project.1}}</a></h5></div>
         {% endfor %}
 
@@ -29,7 +29,7 @@
         {% else %}
             <div class="row"><h4>Other Projects</h4></div>
         {% endifequal %}
-        {% for project in other_projects %}
+        {% for project in other_pages %}
             <!--div class="row"><h5><a href="/{{language}}/{{project.0}}/">{{project.1}}</a></h5></div-->
             <div class="row"><h5><a href="/{{language}}/#{{project.0}}">{{project.1}}</a></h5></div>
         {% endfor %}

@@ -6,16 +6,22 @@ from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-import logging
-
-
 from .models import Page, Image
 from .forms import PageEditForm, ImageUploadForm
 
 
 def get_featured_and_other(language, user_is_admin=False):
-    featured_projects = []
-    other_projects = []
+    """
+    Gives you the primary keys and page names of all Page objects, split up in two arrays: featured_pages and
+    non_featured_pages. The sorting is done by the 'featured' field in the model Page.
+    To keep out objects that are only meant to be seen by the admin, keep user_is_admin as False.
+
+    :param language: Desired language for the Page names
+    :param user_is_admin: If True, Pages with 'admin_only' set to True will be included.
+    :return: Array of two arrays containing two-element-arrays. Example: [ [[1, "Contact page"], [2, "Project #1"]], [[4, "Page #3"], [8, "Fun page"]] ]
+    """
+    featured_pages = []
+    non_featured_pages = []
 
     if user_is_admin:
         perm_filtered_query = Page.objects.all()
@@ -24,12 +30,12 @@ def get_featured_and_other(language, user_is_admin=False):
 
     for page in perm_filtered_query.filter(featured=True):
         content = page.content.get(language=language)
-        featured_projects.append([page.pk, content.name])
+        featured_pages.append([page.pk, content.name])
     for page in perm_filtered_query.filter(featured=False):
         content = page.content.get(language=language)
-        other_projects.append([page.pk, content.name])
+        non_featured_pages.append([page.pk, content.name])
 
-    return [featured_projects, other_projects]
+    return [featured_pages, non_featured_pages]
 
 
 class IndexView(ListView):
@@ -45,7 +51,7 @@ class IndexView(ListView):
         context = super(IndexView, self).get_context_data(**kwargs)
         context['language'] = self.kwargs['language']
 
-        context['featured_projects'], context['other_projects'] = get_featured_and_other(self.kwargs['language'],
+        context['featured_pages'], context['other_pages'] = get_featured_and_other(self.kwargs['language'],
                                                                                          self.request.user.is_superuser)
         return context
 
@@ -105,7 +111,7 @@ class ContentView(DetailView):
         context = super(ContentView, self).get_context_data(**kwargs)
 
         context['language'] = self.kwargs['language']
-        context['featured_projects'], context['other_projects'] = \
+        context['featured_pages'], context['other_pages'] = \
             get_featured_and_other(self.kwargs['language'], self.request.user.is_superuser)
         return context
 
