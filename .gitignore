@@ -6,3 +6,6 @@ __pycache__/*
 
 # Database migrations
 migrations/
+
+# Cache files
+*.pyc
