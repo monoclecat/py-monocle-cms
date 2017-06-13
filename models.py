@@ -38,6 +38,9 @@ class Page(models.Model):
     content = models.ManyToManyField(Content, default=None)
 
     def save(self, *args, **kwargs):
+        """
+        Create Content objects when a new Page object is created and add them to the ManyToManyField
+        """
         if not self.pk:
             super(Page, self).save(*args, **kwargs)
             for language in self.languages:

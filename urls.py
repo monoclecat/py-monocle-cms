@@ -1,18 +1,3 @@
-"""homepage_django URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.11/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
 from django.conf.urls import url
 from django.urls import reverse_lazy
 from monocle_cms.views import *
@@ -34,7 +19,7 @@ urlpatterns = [
     url(r'^image-upload/$', ImageUploadView.as_view(), name='image_upload'),
     url(r'^logout/$', login_view, name='logout'),
     url(r'^login/$', login_view, name='login'),
-    url(r'^admin/$', AdminView.as_view(), name='admin'),
+    url(r'^pages/$', AdminView.as_view(), name='admin'),
     url(r'^edit/(?P<language>'+languages_regex+')/(?P<pk>\d+)/(?P<slug>\S*)$', ContentEditView.as_view(), name='content_edit'),
     url(r'^(?P<language>'+languages_regex+')/(?P<pk>\d+)/(?P<slug>\S*)$', ContentView.as_view(), name='content'),
     url(r'^(?P<language>'+languages_regex+')/$', IndexView.as_view(), name='index'),

@@ -5,6 +5,7 @@ from django.views.generic import DetailView
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+import logging
 
 from .models import Page, Image
 from .forms import PageEditForm, ImageUploadForm
@@ -84,15 +85,23 @@ class ImageUploadView(LoginRequiredMixin, FormView):
         return context
 
     def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        files = request.FILES.getlist('image_file_field')
-        if form.is_valid():
-            for f in files:
-                Image.objects.create(file=f, tag=request.POST['tag'])
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+        if 'delete_single' in request.POST:
+            if request.POST['pk'] is not None:
+                Image.objects.get(pk=request.POST['pk']).delete()
+            else:
+                logging.error("request.POST['pk'] is None in ImageUploadView.post() -> delete image")
+        elif 'upload' in request.POST:
+            form_class = self.get_form_class()
+            form = self.get_form(form_class)
+            files = request.FILES.getlist('image_file_field')
+            if form.is_valid():
+                for f in files:
+                    Image.objects.create(file=f, tag=request.POST['tag'])
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
+        return HttpResponseRedirect(reverse('monocle_cms:image_upload'))
+
 
 
 class ContentView(DetailView):
@@ -160,9 +169,6 @@ class ContentEditView(LoginRequiredMixin, FormView, ContentView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        """
-        If the form is valid, save the associated model.
-        """
         self.object = form.save()
 
         content = self.object.content.get(language=self.kwargs['language'])
@@ -195,5 +201,8 @@ class AdminView(LoginRequiredMixin, ListView):
         if 'new' in request.POST:
             Page.objects.create()
         elif 'delete' in request.POST:
-            Page.objects.get(pk=request.POST['pk']).delete()
+            if request.POST['pk'] is not None:
+                Page.objects.get(pk=request.POST['pk']).delete()
+            else:
+                logging.error("request.POST['pk'] is None in AdminView.post() -> delete page")
         return HttpResponseRedirect(reverse('monocle_cms:admin'))
