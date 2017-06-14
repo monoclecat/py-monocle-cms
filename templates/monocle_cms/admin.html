@@ -17,7 +17,8 @@ Admin - Monoclecat
         <div class="row same_height" style="background-color: {% cycle '#f2f2f2' '#ffffff' %}">
             <div class="col-xs-2">
                 <h3>PK: {{ item.pk }}</h3>
-                <form class="form-inline" action="{% url 'monocle_cms:admin' %}" method="post">
+                <form onsubmit="return confirm('Are you sure?');"
+                      class="form-inline" action="{% url 'monocle_cms:admin' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="pk" value="{{ item.pk }}">
                     <input type="submit" name="delete" class="btn btn-default btn-xs" value="Delete"/>
