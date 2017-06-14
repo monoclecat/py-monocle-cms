@@ -5,6 +5,8 @@ from django.utils.text import slugify
 
 from stdimage.models import StdImageField
 from stdimage.utils import UploadToClassNameDirUUID
+from django.db.models.signals import post_delete
+from django.dispatch.dispatcher import receiver
 
 
 class Image(models.Model):
@@ -15,6 +17,13 @@ class Image(models.Model):
     })
     tag = models.CharField(max_length=50)
     uploaded = models.DateField(auto_now_add=True)
+
+
+@receiver(post_delete, sender=Image)
+def image_delete(sender, instance, **kwargs):
+    if instance.file:
+        # Pass false so FileField doesn't save the model.
+        instance.file.delete(False)
 
 
 class Content(models.Model):

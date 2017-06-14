@@ -19,20 +19,25 @@ Image Upload - Monoclecat
 
     {% for tag in images_tag_grouped %}
         <div style="padding: 0.5em; background-color: {% cycle '#f2f2f2' '#ffffff' %}">
-            {% ifequal tag.grouper "" %}
-                <h4>No tag</h4>
-            {% else %}
-                <h4>{{ tag.grouper }}</h4>
-            {% endifequal %}
+            <form class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="post">
+                <h4>
+                {% ifequal tag.grouper "" %} No tag {% else %} {{ tag.grouper }} {% endifequal %}
+                {% csrf_token %}
+                <input type="hidden" name="tag" value="{{ tag.grouper }}">
+                <input type="submit" name="delete_tag" class="btn btn-default btn-xs" value="Delete"/>
+                </h4>
+            </form>
+
             <div class="row same_height" style="padding: 0.5em">
             {% for image in tag.list %}
                 <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 hover-parent">
                     <a href="{{ image.file.url }}"><img src="{{ image.file.medium.url }}" class="img-responsive" ></a>
-                    <h5>Primary key: {{ image.pk }}</h5>
-                    <form class="form-inline show-on-hover" action="{% url 'monocle_cms:image_upload' %}" method="post">
+                    <form class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="post">
+                        <h5>Primary key: {{ image.pk }}
                         {% csrf_token %}
                         <input type="hidden" name="pk" value="{{ image.pk }}">
                         <input type="submit" name="delete_single" class="btn btn-default btn-xs" value="Delete"/>
+                        </h5>
                     </form>
                 </div>
             {% endfor %}

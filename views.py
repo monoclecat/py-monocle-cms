@@ -90,6 +90,9 @@ class ImageUploadView(LoginRequiredMixin, FormView):
                 Image.objects.get(pk=request.POST['pk']).delete()
             else:
                 logging.error("request.POST['pk'] is None in ImageUploadView.post() -> delete image")
+        elif 'delete_tag' in request.POST:
+            for obj in Image.objects.filter(tag=request.POST['tag']):
+                obj.delete()
         elif 'upload' in request.POST:
             form_class = self.get_form_class()
             form = self.get_form(form_class)

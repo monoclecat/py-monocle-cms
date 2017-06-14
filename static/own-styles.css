@@ -59,13 +59,6 @@ body {
     flex-direction: column;
 }
 
-.show-on-hover {
-    display: none;
-}
-
-.hover-parent:hover .show-on-hover{
-    display: block;
-}
 
 /* -------------------- LOGO ---------------------*/
 #logo {
