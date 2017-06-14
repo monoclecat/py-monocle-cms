@@ -16,7 +16,7 @@ class Image(models.Model):
         'small': {"width": 100, "height": 100, "crop": True},
     })
     tag = models.CharField(max_length=50)
-    uploaded = models.DateField(auto_now_add=True)
+    uploaded = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(post_delete, sender=Image)

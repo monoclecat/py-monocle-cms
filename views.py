@@ -5,6 +5,7 @@ from django.views.generic import DetailView
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.functions import Lower
 import logging
 
 from .models import Page, Image
@@ -80,8 +81,22 @@ class ImageUploadView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super(ImageUploadView, self).get_context_data(**kwargs)
-        images = Image.objects.all()
+        sort = self.request.GET.get('sort')
+
+        if sort is None:
+            sort = "-"
+        sorting_params = sort.split('-', 2)
+
+        if sorting_params[0] not in [f.name for f in Image._meta.get_fields()]:
+            sorting_params[0] = 'uploaded'
+
+        if sorting_params[1] == 'asc':
+            images = Image.objects.all().order_by(Lower(sorting_params[0]).asc())
+        else:
+            images = Image.objects.all().order_by(Lower(sorting_params[0]).desc())
+
         context['images'] = images
+        context['sort'] = sort
         return context
 
     def post(self, request, *args, **kwargs):

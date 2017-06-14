@@ -49,6 +49,7 @@
                 {% endifequal %}
                 {% if request.user.is_superuser %}
                     <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2"><a href="{% url 'monocle_cms:admin' %}">Admin</a></div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2"><a href="{% url 'monocle_cms:image_upload' %}">Images</a></div>
                 {% endif %}
             </div>
         </div>

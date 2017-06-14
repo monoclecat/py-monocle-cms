@@ -15,6 +15,17 @@ Image Upload - Monoclecat
         {% crispy form %}
     </form>
 
+    <form style="padding: 1em" class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="get">
+        <h4>Sort/Filter Tags
+        <select name="sort" class="form-control" onchange="this.form.submit()">
+          <option value="uploaded-desc" {% ifequal sort 'uploaded-desc' %} selected {% endifequal %} >Newest first</option>
+          <option value="uploaded-asc" {% ifequal sort 'uploaded-asc' %} selected {% endifequal %} >Oldest first</option>
+          <option value="tag-asc" {% ifequal sort 'tag-asc' %} selected {% endifequal %} >A - Z</option>
+          <option value="tag-desc" {% ifequal sort 'tag-desc' %} selected {% endifequal %} >Z - A</option>
+        </select>
+        </h4>
+    </form>
+
     {% regroup images by tag as images_tag_grouped %}
 
     {% for tag in images_tag_grouped %}
