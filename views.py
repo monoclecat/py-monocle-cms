@@ -206,9 +206,9 @@ class ContentEditView(LoginRequiredMixin, FormView, ContentView):
         return super(ContentEditView, self).form_valid(form)
 
 
-class AdminView(LoginRequiredMixin, ListView):
+class PagesView(LoginRequiredMixin, ListView):
     model = Page
-    template_name = 'monocle_cms/admin.html'
+    template_name = 'monocle_cms/pages.html'
     context_object_name = 'page'
     login_url = '/login/'
 
@@ -222,5 +222,5 @@ class AdminView(LoginRequiredMixin, ListView):
             if request.POST['pk'] is not None:
                 Page.objects.get(pk=request.POST['pk']).delete()
             else:
-                logging.error("request.POST['pk'] is None in AdminView.post() -> delete page")
-        return HttpResponseRedirect(reverse('monocle_cms:admin'))
+                logging.error("request.POST['pk'] is None in PagesView.post() -> delete page")
+        return HttpResponseRedirect(reverse('monocle_cms:pages'))
