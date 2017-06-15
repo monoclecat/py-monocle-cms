@@ -1,0 +1,61 @@
+{% extends "monocle_cms/main_no_sidebar.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Image Upload - Monoclecat
+{% endblock %}
+
+{% block main %}
+    <h1>Image Upload</h1>
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <form class="form-horizontal" style="padding: 2em"
+          action="{% url 'monocle_cms:image_upload' %}" method="post" enctype="multipart/form-data">
+        {% crispy form %}
+    </form>
+
+    <form style="padding: 1em" class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="get">
+        <h4>Sort/Filter Tags
+        <select name="sort" class="form-control" onchange="this.form.submit()">
+          <option value="uploaded-desc" {% ifequal sort 'uploaded-desc' %} selected {% endifequal %} >Newest first</option>
+          <option value="uploaded-asc" {% ifequal sort 'uploaded-asc' %} selected {% endifequal %} >Oldest first</option>
+          <option value="tag-asc" {% ifequal sort 'tag-asc' %} selected {% endifequal %} >A - Z</option>
+          <option value="tag-desc" {% ifequal sort 'tag-desc' %} selected {% endifequal %} >Z - A</option>
+        </select>
+        </h4>
+    </form>
+
+    {% regroup images by tag as images_tag_grouped %}
+
+    {% for tag in images_tag_grouped %}
+        <div style="padding: 0.5em; background-color: {% cycle '#f2f2f2' '#ffffff' %}">
+            <form onsubmit="return confirm('Are you sure?');"
+                  class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="post">
+                <h4>
+                {% ifequal tag.grouper "" %} No tag {% else %} {{ tag.grouper }} {% endifequal %}
+                {% csrf_token %}
+                <input type="hidden" name="tag" value="{{ tag.grouper }}">
+                <input type="submit" name="delete_tag" class="btn btn-default btn-xs" value="Delete"/>
+                </h4>
+            </form>
+
+            <div class="row same_height" style="padding: 0.5em">
+            {% for image in tag.list %}
+                <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 hover-parent">
+                    <a href="{{ image.file.url }}"><img src="{{ image.file.medium.url }}" class="img-responsive" ></a>
+                    <form onsubmit="return confirm('Are you sure?');"
+                          class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="post">
+                        <h5>Primary key: {{ image.pk }}
+                        {% csrf_token %}
+                        <input type="hidden" name="pk" value="{{ image.pk }}">
+                        <input type="submit" name="delete_single" class="btn btn-default btn-xs" value="Delete"/>
+                        </h5>
+                    </form>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+{%  endblock %}
