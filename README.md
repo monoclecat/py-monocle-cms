@@ -22,39 +22,5 @@ To save you the click: `cd` to your desired directory and create a project with 
 `django-admin startproject mysite`. Run `python3 manage.py migrate` to initialize the project. 
 
 2. Jump into the newly created directory with `cd mysite/` and clone the py-monocle-cms app into the newly created 
-project by running `git clone https://github.com/monoclecat/py-monocle-cms.git`.
-
-3. Now open `mysite/settings.py` and add these lines to the `INSTALLED_APPS` list. 
-```
-    'py-monocle-cms.apps.MonocleCmsConfig',
-    'bootstrap3',
-    'markdown',
-    'crispy_forms',
-```
-
-4. Next, open `mysite/urls.py`. In this very sparsely populated file you should find this piece of code: 
- 
-```
-from django.conf.urls import url
-from django.contrib import admin
-
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include('testsite.urls')),
-]
-```
-
-Add the following line of code in the urlpatterns and add the `include` import to the first line:
-
-```
-from django.conf.urls import url, include
-from django.contrib import admin
-
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include('mysite.urls')),
-]
-```
-
-
+project by running `git clone https://github.com/monoclecat/py_monocle_cms.git`.
 
