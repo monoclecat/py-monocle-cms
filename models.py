@@ -69,6 +69,6 @@ class Page(models.Model):
         except Content.DoesNotExist:
             slug = ''
         if edit:
-            return reverse('monocle_cms:content_edit', args=[language, self.pk, slug])
+            return reverse('py_monocle_cms:content_edit', args=[language, self.pk, slug])
         else:
-            return reverse('monocle_cms:content', args=[language, self.pk, slug])
+            return reverse('py_monocle_cms:content', args=[language, self.pk, slug])
