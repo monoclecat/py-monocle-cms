@@ -24,3 +24,49 @@ To save you the click: `cd` to your desired directory and create a project with 
 2. Jump into the newly created directory with `cd mysite/` and clone the py-monocle-cms app into the newly created 
 project by running `git clone https://github.com/monoclecat/py_monocle_cms.git`.
 
+3.  Next, open `mysite/settings.py`.
+
+    Add the following to the list of `INSTALLED_APPS`:
+    
+    ```
+    'py_monocle_cms.apps.PyMonocleCmsConfig',
+    'bootstrap3',
+    'markdown',
+    'crispy_forms',
+    ```
+    
+    In `TEMPLATES`, change `DIRS: [],` to `DIRS: [os.path.join(BASE_DIR, 'templates')],` and add 
+    `'django.template.context_processors.media'` to the `context_processors` element of `OPTIONS`.
+    
+    Append the following lines to settings.py:
+
+    ```
+    STATICFILES_DIRS = ["py_monocle_cms/static",]
+    STATIC_ROOT = 'static'
+    MEDIA_ROOT = 'py_monocle_cms/media'
+    MEDIA_URL = '/py_monocle_cms/media/'
+    CRISPY_TEMPLATE_PACK = 'bootstrap3'
+    ```
+    
+4.  In `mysite/urls.py`, change 
+
+    ```
+    from django.conf.urls import url
+    from django.contrib import admin
+
+    urlpatterns = [
+        url(r'^admin/', admin.site.urls),
+    ]
+    ```
+    
+    to 
+    
+    ```
+    from django.conf.urls import url, include
+    from django.contrib import admin
+
+    urlpatterns = [
+        url(r'^admin/', admin.site.urls),
+        url(r'^', include('py_monocle_cms.urls')),
+    ]
+    ```

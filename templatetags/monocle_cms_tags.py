@@ -1,6 +1,6 @@
 from django import template
 import markdown
-from monocle_cms.md_extensions import *
+from py_monocle_cms.md_extensions import *
 
 register = template.Library()
 

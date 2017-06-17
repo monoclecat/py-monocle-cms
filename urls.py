@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 from django.views.defaults import page_not_found
 
+from .models import Page
+
 languages_regex = '('
 for language in Page.languages:
     languages_regex += language + '|'
