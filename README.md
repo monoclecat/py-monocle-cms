@@ -68,8 +68,9 @@ To save you the click: Switch to your desired root directory in a terminal and c
 2. Download the py_monocle_cms app like so: `django-admin startapp --template=https://github.com/monoclecat/py_monocle_cms/archive/master.zip py_monocle_cms` and then run the migrate command once more. 
 _If you get an error saying "certificate verify failed", you need to install the certificates by running `/Applications/Python\ 3.6/Install\ Certificates.command`. Now delete the empty py_monocle_cms folder and repeat the step._
 
-3.  Next, open `mysite/settings.py`. _Note: You might get an error saying that the packages mentioned below are missing. In this case you must install them first: `pip3 install APPNAME`_. 
-    Add the following to the list of `INSTALLED_APPS`:
+3.  Next, open `mysite/settings.py`. Add the following to the list of `INSTALLED_APPS`: 
+
+    _Note: You might get an error saying that the packages mentioned below are missing. In this case you must install them first: `pip3 install APPNAME`_.
     
     ```
     'py_monocle_cms.apps.PyMonocleCmsConfig',
