@@ -48,7 +48,7 @@ __If you want the images to stand for themselves and each have their description
 image includes.__
 
 
-## All hackable
+## All modifiable 
 
 In the source I added comments and explanations to some of the more sophisticated functions. I encourage you to adapt the 
 code to your needs, modify the templates and report any bugs you find to: contact@monoclecat.de
