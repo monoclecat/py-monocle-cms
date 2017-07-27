@@ -119,7 +119,7 @@ The app should run as desired and when visiting the address `127.0.0.1:8000` in 
 the an empty webpage. If this is the case, congratulations! You are almost ready to fill your site with content. 
 
 The last step is to create a super-user, will you will use to log in to your site and modify it. 
-To create a super-user, execute the command `python manage.py createsuperuser`. 
+To create a super-user, execute the command `python3 manage.py createsuperuser`. 
 Enter username, email and password and you're ready to go. Now you can not only log into the admin part of your webpage 
 under `http://127.0.0.1:8000/login/`, you can also access the database tables and users under `http://127.0.0.1:8000/admin/`.
 It is very important that you keep these login credentials secret!
