@@ -1,4 +1,4 @@
-{% extends "monocle_cms/main_no_sidebar.html" %}
+{% extends "py_monocle_cms/main_no_sidebar.html" %}
 
 {% block title %}
 Login - Monoclecat
@@ -11,7 +11,7 @@ Login - Monoclecat
     <h1>Login</h1>
     {% endif %}
 
-    <form class="form-inline" action="{% url 'monocle_cms:login' %}" method="post">
+    <form class="form-inline" action="{% url 'py_monocle_cms:login' %}" method="post">
     {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
         {% if request.user.is_superuser %}

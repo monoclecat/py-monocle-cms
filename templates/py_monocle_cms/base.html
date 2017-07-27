@@ -42,14 +42,14 @@
             <div id="menu" class="row">
                 {% ifequal language 'en' %}
                     <div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 col-sm-offset-2 col-md-offset-3 col-lg-offset-3"><a href="/de">Home</a></div>
-                    <div class="col-xs-4 col-sm-4 col-md-3 col-lg-2"><a href="{% url 'monocle_cms:about-de' %}">Über mich</a></div>
+                    <div class="col-xs-4 col-sm-4 col-md-3 col-lg-2"><a href="{% url 'py_monocle_cms:about-de' %}">Über mich</a></div>
                 {% else %}
                     <div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 col-sm-offset-2 col-md-offset-3 col-lg-offset-3"><a href="/en">Home</a></div>
-                    <div class="col-xs-4 col-sm-4 col-md-3 col-lg-2"><a href="{% url 'monocle_cms:about-en' %}">About me</a></div>
+                    <div class="col-xs-4 col-sm-4 col-md-3 col-lg-2"><a href="{% url 'py_monocle_cms:about-en' %}">About me</a></div>
                 {% endifequal %}
                 {% if request.user.is_superuser %}
-                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2"><a href="{% url 'monocle_cms:pages' %}">Pages</a></div>
-                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2"><a href="{% url 'monocle_cms:image_upload' %}">Images</a></div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2"><a href="{% url 'py_monocle_cms:pages' %}">Pages</a></div>
+                    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2"><a href="{% url 'py_monocle_cms:image_upload' %}">Images</a></div>
                 {% endif %}
             </div>
         </div>

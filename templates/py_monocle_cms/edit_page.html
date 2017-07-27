@@ -1,4 +1,4 @@
-{% extends "monocle_cms/main_with_sidebar.html" %}
+{% extends "py_monocle_cms/main_with_sidebar.html" %}
 {% load crispy_forms_tags %}
 {% load monocle_cms_tags %}
 
@@ -15,7 +15,7 @@
 
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-    <form class="bootstrap3" action="{% url 'monocle_cms:content_edit' language page.id slug %}" method="post">
+    <form class="bootstrap3" action="{% url 'py_monocle_cms:content_edit' language page.id slug %}" method="post">
         <input type="submit" name="save" value="Save" class="btn btn-primary" id="submit-id-save">
         {% for other_language in page.languages %}
             {% ifnotequal other_language language %}

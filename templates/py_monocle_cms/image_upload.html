@@ -1,4 +1,4 @@
-{% extends "monocle_cms/main_no_sidebar.html" %}
+{% extends "py_monocle_cms/main_no_sidebar.html" %}
 {% load crispy_forms_tags %}
 
 {% block title %}
@@ -11,11 +11,11 @@ Image Upload - Monoclecat
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
     <form class="form-horizontal" style="padding: 2em"
-          action="{% url 'monocle_cms:image_upload' %}" method="post" enctype="multipart/form-data">
+          action="{% url 'py_monocle_cms:image_upload' %}" method="post" enctype="multipart/form-data">
         {% crispy form %}
     </form>
 
-    <form style="padding: 1em" class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="get">
+    <form style="padding: 1em" class="form-inline" action="{% url 'py_monocle_cms:image_upload' %}" method="get">
         <h4>Sort/Filter Tags
         <select name="sort" class="form-control" onchange="this.form.submit()">
           <option value="uploaded-desc" {% ifequal sort 'uploaded-desc' %} selected {% endifequal %} >Newest first</option>
@@ -31,7 +31,7 @@ Image Upload - Monoclecat
     {% for tag in images_tag_grouped %}
         <div style="padding: 0.5em; background-color: {% cycle '#f2f2f2' '#ffffff' %}">
             <form onsubmit="return confirm('Are you sure?');"
-                  class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="post">
+                  class="form-inline" action="{% url 'py_monocle_cms:image_upload' %}" method="post">
                 <h4>
                 {% ifequal tag.grouper "" %} No tag {% else %} {{ tag.grouper }} {% endifequal %}
                 {% csrf_token %}
@@ -45,7 +45,7 @@ Image Upload - Monoclecat
                 <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 hover-parent">
                     <a href="{{ image.file.url }}"><img src="{{ image.file.medium.url }}" class="img-responsive" ></a>
                     <form onsubmit="return confirm('Are you sure?');"
-                          class="form-inline" action="{% url 'monocle_cms:image_upload' %}" method="post">
+                          class="form-inline" action="{% url 'py_monocle_cms:image_upload' %}" method="post">
                         <h5>Primary key: {{ image.pk }}
                         {% csrf_token %}
                         <input type="hidden" name="pk" value="{{ image.pk }}">

@@ -42,7 +42,7 @@ def get_featured_and_other(language, user_is_admin=False):
 
 class IndexView(ListView):
     model = Page
-    template_name = 'monocle_cms/index.html'
+    template_name = 'py_monocle_cms/index.html'
     context_object_name = 'page'
 
     def get_queryset(self):
@@ -70,12 +70,12 @@ def login_view(request):
         logout(request)
         return HttpResponseRedirect(request.POST['next'])
     else:
-        return render(request, 'monocle_cms/login_page.html', {'next': request.GET.get('next', '/login/')})
+        return render(request, 'py_monocle_cms/login_page.html', {'next': request.GET.get('next', '/login/')})
 
 
 class ImageUploadView(LoginRequiredMixin, FormView):
     form_class = ImageUploadForm
-    template_name = 'monocle_cms/image_upload.html'
+    template_name = 'py_monocle_cms/image_upload.html'
     success_url = '/image-upload/'
     login_url = '/login/'
 
@@ -118,13 +118,13 @@ class ImageUploadView(LoginRequiredMixin, FormView):
                 return self.form_valid(form)
             else:
                 return self.form_invalid(form)
-        return HttpResponseRedirect(reverse('monocle_cms:image_upload'))
+        return HttpResponseRedirect(reverse('py_monocle_cms:image_upload'))
 
 
 
 class ContentView(DetailView):
     model = Page
-    template_name = 'monocle_cms/detail_page.html'
+    template_name = 'py_monocle_cms/detail_page.html'
     context_object_name = 'page'
 
     def get_object(self, queryset=None):
@@ -157,7 +157,7 @@ class ContentView(DetailView):
 
 class ContentEditView(LoginRequiredMixin, FormView, ContentView):
     form_class = PageEditForm
-    template_name = 'monocle_cms/edit_page.html'
+    template_name = 'py_monocle_cms/edit_page.html'
     login_url = '/login/'
 
     def get(self, request, *args, **kwargs):
@@ -208,7 +208,7 @@ class ContentEditView(LoginRequiredMixin, FormView, ContentView):
 
 class PagesView(LoginRequiredMixin, ListView):
     model = Page
-    template_name = 'monocle_cms/pages.html'
+    template_name = 'py_monocle_cms/pages.html'
     context_object_name = 'page'
     login_url = '/login/'
 
@@ -223,4 +223,4 @@ class PagesView(LoginRequiredMixin, ListView):
                 Page.objects.get(pk=request.POST['pk']).delete()
             else:
                 logging.error("request.POST['pk'] is None in PagesView.post() -> delete page")
-        return HttpResponseRedirect(reverse('monocle_cms:pages'))
+        return HttpResponseRedirect(reverse('py_monocle_cms:pages'))
