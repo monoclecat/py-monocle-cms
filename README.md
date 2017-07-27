@@ -58,17 +58,14 @@ code to your needs, modify the templates and report any bugs you find to: contac
 This short guide covers the installation from scratch. If you want to embed the app into your existing project, 
 I believe you are knowledgeable enough to leave out the steps aimed at configuring newly created projects. 
 
-_Note: I use Python 3 for installation of the cms and beyond. You will encounter strange errors if you begin a command line 
-with "python" instead of "python3". In the Django tutorial and in other places you might find a command beginning with "python". To execute the command
-in Python3, just make it a "python3"._
+_Note: I use Python 3 for installation of the cms and beyond. You will encounter strange errors if you begin a command line with "python" instead of "python3". In the Django tutorial and in other places you might find a command beginning with "python". To execute the command in Python3, just make it a "python3"._
 
 1. If you haven't done so yet, create a new django project, as described 
-[in Django Tutorial 01](https://docs.djangoproject.com/en/1.11/intro/tutorial01/)
-To save you the click: `cd` to your desired directory and create a project with the command 
-`django-admin startproject mysite`. Run `python3 manage.py migrate` to initialize the project. 
+[in Django Tutorial 01](https://docs.djangoproject.com/en/1.11/intro/tutorial01/). 
+To save you the click: Switch to your desired root directory in a terminal and create a project with the command 
+`django-admin startproject mysite`. Enter the newly created directory and run `python3 manage.py migrate` to initialize the project. 
 
-2. Jump into the newly created directory with `cd mysite/` and clone the py-monocle-cms app into the newly created 
-project by running `git clone https://github.com/monoclecat/py_monocle_cms.git`.
+2. Clone the py-monocle-cms app into the newly created project by running `git clone https://github.com/monoclecat/py_monocle_cms.git`.
 
 3.  Next, open `mysite/settings.py`.
 
