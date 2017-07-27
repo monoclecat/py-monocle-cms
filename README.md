@@ -21,21 +21,17 @@ you don't a page to experience the limelight.
 
 Write the content of your pages in nice-and-tidy [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet), 
 which gives you plenty of styling options. Integrating images is easier than you might think! Instead of you needing to 
-enter the filepath, you just need to enter the image's unique ID, shown on the image upload page & gallery. Along with that 
+enter the filepath, you just need to enter the image's unique ID (in the example it is 4), shown on the image upload page & gallery. Along with that 
 you can set the size (small, medium or large). 
 
 Example: `![Text that's shown when the image can't be loaded](4 small "Here's a cat!")`
 
-Gives you: 
+Gives you something like this, just with the image and text centered in the page: 
 
 ![Text that's shown when the image can't be loaded](https://raw.githubusercontent.com/monoclecat/py_monocle_cms/master/media/image/d20458f78f0640018a9df13fcd0ffea2.medium.jpg)
 
 _Here's a cat!_
 
-* Easy image upload and automatic thumbnail generation
-* The landing page lists the content of all pages like a blog
-* The content of pages is written in [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet), 
-no html required!
 
 ## Installation
 
