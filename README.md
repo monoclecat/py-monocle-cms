@@ -70,6 +70,8 @@ _If you get an error saying "certificate verify failed", you need to install the
 
 3.  Next, open `mysite/settings.py`.
 
+    _Note: You might get an error saying that the packages mentioned below are missing. In this case you must install them first: `pip3 install APPNAME`
+
     Add the following to the list of `INSTALLED_APPS`:
     
     ```
