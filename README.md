@@ -4,7 +4,32 @@ This is the repository for py-monocle-cms, the content management system I use f
 py-monocle-cms is meant for small, multilingual sites that are built as a blog with one user-account being the maintainer, 
 having superuser rights. 
 
-Features are:
+## Features
+
+### Easy image upload and automatic thumbnail generation
+
+Upload, tag and add images to your posts in no time using py_monocle_cms's intergalactic time-bending image management system. 
+It's as easy as counting to 3! The image upload page also integrates a gallery, allowing you to sort images by tag, upload date 
+and unique ID.
+
+### Nicely styled newsfeed on the landing page
+
+The pages you write are directly added to the newsfeed on the front page of your site. Of course there is a checkbox you can click if 
+you don't a page to experience the limelight. 
+
+### No html coding required
+
+Write the content of your pages in nice-and-tidy [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet), 
+which gives you plenty of styling options. Integrating images is easier than you might think! Instead of you needing to 
+enter the filepath, you just need to enter the image's unique ID, shown on the image upload page & gallery. Along with that 
+you can set the size (small, medium or large). 
+
+Example: `![Text that's shown when the image can't be loaded](4 small "Here's a cat!")`
+
+Gives you: 
+
+![Text that's shown when the image can't be loaded](https://github.com/monoclecat/py_monocle_cms/media/image/d20458f78f0640018a9df13fcd0ffea2.medium.jpg)
+_Here's a cat!_
 
 * Easy image upload and automatic thumbnail generation
 * The landing page lists the content of all pages like a blog

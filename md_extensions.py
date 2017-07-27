@@ -73,7 +73,7 @@ class PackImagesIntoContainers(Treeprocessor):
 
 class InsertImgLinks(Preprocessor):
     def run(self, lines):
-        pattern = re.compile(r' *\!\[ *(?P<alt_text>[ a-zA-Z0-9]+) *\] *\( *(?P<pk>\d+) +(?P<size>(small|medium|large)) +"(?P<title>[ a-zA-Z0-9]+)" *\) *')
+        pattern = re.compile(r' *\!\[ *(?P<alt_text>[^]]+) *\] *\( *(?P<pk>\d+) +(?P<size>(small|medium|large)) +"(?P<title>[^]"]+)" *\) *')
         new_lines = []
         for line in lines:
             m = pattern.match(line)
