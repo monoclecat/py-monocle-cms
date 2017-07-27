@@ -4,20 +4,20 @@ This is the repository for py-monocle-cms, the content management system I use f
 py-monocle-cms is meant for small, multilingual sites that are built as a blog with one user-account being the maintainer, 
 having superuser rights. 
 
-## Features
+# Features
 
-### Easy image upload and automatic thumbnail generation
+## Easy image upload and automatic thumbnail generation
 
 Upload, tag and add images to your posts in no time using py_monocle_cms's intergalactic time-bending image management system. 
 It's as easy as counting to 3! The image upload page also integrates a gallery, allowing you to sort images by tag, upload date 
 and unique ID.
 
-### Nicely styled newsfeed on the landing page
+## Nicely styled newsfeed on the landing page
 
 The pages you write are directly added to the newsfeed on the front page of your site. Of course there is a checkbox you can click if 
 you don't a page to experience the limelight. 
 
-### No html coding required
+## No html coding required
 
 Write the content of your pages in nice-and-tidy [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet), 
 which gives you plenty of styling options. Integrating images is easier than you might think! Instead of you needing to 
@@ -32,8 +32,28 @@ Gives you something like this, just with the image and text centered in the page
 
 _Here's a cat!_
 
+#### Multiple images in a row
 
-## Installation
+If you want to display multiple images in a row, do not leave a blank line between the image includes like so:
+
+```
+![Text](ID SIZE "Description")
+![Text](ID SIZE "Description")
+![Text](ID SIZE "Description")
+```
+
+_Please note that none of the descriptions will be displayed_
+
+__If you want the images to stand for themselves and each have their descriptions below them, add a blank line between the 
+image includes.__
+
+
+## All hackable
+
+In the source I added comments and explanations to some of the more sophisticated functions. I encourage you to adapt the 
+code to your needs, modify the templates and report any bugs you find to: contact@monoclecat.de
+
+# Installation
 
 This short guide covers the installation from scratch. If you want to embed the app into your existing project, 
 I believe you are knowledgeable enough to leave out the steps aimed at configuring newly created projects. 

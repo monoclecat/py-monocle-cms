@@ -33,6 +33,7 @@ class PageEditForm(ModelForm):
     class Meta:
         model = Page
         fields = ['tag', 'created', 'admin_only', 'featured', 'name', 'headline', 'abstract', 'body']
+
     tag = forms.CharField(label='Tag', max_length=50, required=False)
     created = forms.DateField(label='Created', required=False)
     admin_only = forms.BooleanField(label='Admin only', required=False)

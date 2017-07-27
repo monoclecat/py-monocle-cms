@@ -37,7 +37,7 @@ class PackImagesIntoContainers(Treeprocessor):
                 else:
                     if len(list(image_node)) == 2:
                         col_class = ["col-xs-6 col-sm-4 col-sm-offset-4 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4",
-                                    "col-xs-6 col-sm-4 col-md-4 col-lg-4"]
+                                     "col-xs-6 col-sm-4 col-md-4 col-lg-4"]
                     elif len(list(image_node)) == 3:
                         col_class = ["col-xs-4 col-sm-4 col-md-4 col-lg-4",
                                      "col-xs-4 col-sm-4 col-md-4 col-lg-4", "col-xs-4 col-sm-4 col-md-4 col-lg-4"]
@@ -73,7 +73,7 @@ class PackImagesIntoContainers(Treeprocessor):
 
 class InsertImgLinks(Preprocessor):
     def run(self, lines):
-        pattern = re.compile(r' *\!\[ *(?P<alt_text>[^]]+) *\] *\( *(?P<pk>\d+) +(?P<size>(small|medium|large)) +"(?P<title>[^]"]+)" *\) *')
+        pattern = re.compile(r' *\!\[ *(?P<alt_text>[^]]+) *\] *\( *(?P<pk>\d+) +(?P<size>(small|medium|large)) +"(?P<title>[^]"]*)" *\) *')
         new_lines = []
         for line in lines:
             m = pattern.match(line)
