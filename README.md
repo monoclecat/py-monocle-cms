@@ -78,7 +78,7 @@ To save you the click: Switch to your desired root directory in a terminal and c
     'crispy_forms',
     ```
     
-    In `TEMPLATES`, change `DIRS: [],` to `DIRS: [os.path.join(BASE_DIR, 'templates')],` and add 
+    In `TEMPLATES`, change `'DIRS': [],` to `'DIRS': [os.path.join(BASE_DIR, 'templates')],` and add 
     `'django.template.context_processors.media'` to the `context_processors` element of `OPTIONS`.
     
     Append the following lines to settings.py:
