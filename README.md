@@ -28,7 +28,8 @@ Example: `![Text that's shown when the image can't be loaded](4 small "Here's a 
 
 Gives you: 
 
-![Text that's shown when the image can't be loaded](https://github.com/monoclecat/py_monocle_cms/media/image/d20458f78f0640018a9df13fcd0ffea2.medium.jpg)
+![Text that's shown when the image can't be loaded](https://raw.githubusercontent.com/monoclecat/py_monocle_cms/master/media/image/d20458f78f0640018a9df13fcd0ffea2.medium.jpg)
+
 _Here's a cat!_
 
 * Easy image upload and automatic thumbnail generation
