@@ -65,7 +65,7 @@ _Note: I use Python 3 for installation of the cms and beyond. You will encounter
 To save you the click: Switch to your desired root directory in a terminal and create a project with the command 
 `django-admin startproject mysite`. Enter the newly created directory and run `python3 manage.py migrate` to initialize the project. 
 
-2. Download the py_monocle_cms app like so: `django-admin startapp --template=https://github.com/monoclecat/py_monocle_cms/archive/master.zip py_monocle_cms` and then run the `migrate` command once more. 
+2. Download the py_monocle_cms app like so: `django-admin startapp --template=https://github.com/monoclecat/py_monocle_cms/archive/master.zip py_monocle_cms`.
 
     _If you get an error saying "certificate verify failed", you need to install the certificates by running `/Applications/Python\ 3.6/Install\ Certificates.command`. Now delete the empty py_monocle_cms folder and repeat the step._
 
@@ -93,7 +93,9 @@ To save you the click: Switch to your desired root directory in a terminal and c
     CRISPY_TEMPLATE_PACK = 'bootstrap3'
     ```
     
-4.  In `mysite/urls.py`, change 
+4.  Run `python3 manage.py migrate` once more. 
+    
+5.  In `mysite/urls.py`, change 
 
     ```
     from django.conf.urls import url
