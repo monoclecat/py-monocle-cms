@@ -40,8 +40,8 @@ else:
     urlpatterns += [url(r'^about-me/$', page_not_found, {'exception': Exception('Not Found')}, name='about-en')]
     urlpatterns += [url(r'^ueber-mich/$', page_not_found, {'exception': Exception('Not Found')}, name='about-de')]
 
-if Page.objects.filter(tag='impressum').first() is not None:
-    impressum_page_pk = Page.objects.filter(tag='impressum').first().pk
+if Page.objects.filter(tag='imprint').first() is not None:
+    impressum_page_pk = Page.objects.filter(tag='imprint').first().pk
     urlpatterns += [url(r'^imprint/$', RedirectView.as_view(
         url=reverse_lazy('py_monocle_cms:content', kwargs={'pk': impressum_page_pk, 'language': 'en', 'slug': ''})),
         name='impressum-en')]
