@@ -9,7 +9,6 @@ from django.db.models.signals import post_delete
 from django.dispatch.dispatcher import receiver
 
 
-
 class Image(models.Model):
     file = StdImageField(upload_to=UploadToClassNameDirUUID(), blank=True, variations={
         'large': {"height": 400},
