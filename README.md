@@ -28,7 +28,7 @@ Example: `![Text that's shown when the image can't be loaded](4 small "Here's a 
 
 Gives you something like this, just with the image and text centered in the page: 
 
-![Text that's shown when the image can't be loaded](https://raw.githubusercontent.com/monoclecat/py_monocle_cms/master/media/image/d20458f78f0640018a9df13fcd0ffea2.medium.jpg)
+![Text that's shown when the image can't be loaded](https://raw.githubusercontent.com/monoclecat/py_monocle_cms/master/media/cat.jpg)
 
 _Here's a cat!_
 
