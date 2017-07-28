@@ -67,7 +67,17 @@ To save you the click: Switch to your desired root directory in a terminal and c
 
 2. Download the py_monocle_cms app like so: `django-admin startapp --template=https://github.com/monoclecat/py_monocle_cms/archive/master.zip py_monocle_cms`.
 
-    _If you get an error saying "certificate verify failed", you need to install the certificates by running `/Applications/Python\ 3.6/Install\ Certificates.command`. Now delete the empty py_monocle_cms folder and repeat the step._
+    _If you get an error saying "certificate verify failed", you need to install the certificates by running `/Applications/Python\ 3.6/Install\ Certificates.command`. Now delete the empty py_monocle_cms folder and repeat the step._ 
+    
+    Downloading the zip-archive of py_monocle_cms removes the .git directory so it's not not a git repository anymore. 
+    If you want to make commits, you will need to re-init the repository and sync it: 
+    
+    ```
+    git init
+    git remote add origin https://github.com/monoclecat/py_monocle_cms.git
+    git fetch
+    git reset origin/master
+    ```
 
 3.  Next, open `mysite/settings.py`. Add the following to the list of `INSTALLED_APPS`: 
 
