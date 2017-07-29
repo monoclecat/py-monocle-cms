@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.views.generic.list import ListView
 from django.views.generic import DetailView
 from django.views.generic.edit import FormView
+from django.views.generic.base import RedirectView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Lower
@@ -38,6 +39,20 @@ def get_featured_and_other(language, user_is_admin=False):
         non_featured_pages.append([page.pk, content.name])
 
     return [featured_pages, non_featured_pages]
+
+
+class TagView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        if Page.objects.filter(tag=self.kwargs['tag']).first() is not None:
+            about_page_pk = Page.objects.filter(tag=self.kwargs['tag']).first().pk
+            if self.kwargs['language'] == 'de':
+                url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'de', 'slug': ''})
+            else:
+                url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'en', 'slug': ''})
+
+        else:
+            url = reverse('py_monocle_cms:404')
+        return url
 
 
 class IndexView(ListView):

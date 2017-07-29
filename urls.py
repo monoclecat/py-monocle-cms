@@ -25,29 +25,9 @@ urlpatterns = [
     url(r'^edit/(?P<language>'+languages_regex+')/(?P<pk>\d+)/(?P<slug>\S*)$', ContentEditView.as_view(), name='content_edit'),
     url(r'^(?P<language>'+languages_regex+')/(?P<pk>\d+)/(?P<slug>\S*)$', ContentView.as_view(), name='content'),
     url(r'^(?P<language>'+languages_regex+')/$', IndexView.as_view(), name='index'),
+    url(r'^about-me/$', TagView.as_view(), kwargs={'language': 'en', 'tag': 'about'}, name='about-en'),
+    url(r'^ueber-mich/$', TagView.as_view(), kwargs={'language': 'de', 'tag': 'about'}, name='about-de'),
+    url(r'^imprint/$', TagView.as_view(), kwargs={'language': 'en', 'tag': 'imprint'}, name='imprint-en'),
+    url(r'^impressum/$', TagView.as_view(), kwargs={'language': 'de', 'tag': 'imprint'}, name='imprint-de'),
+    url(r'^404/$', page_not_found, {'exception': Exception('Not Found')}, name='404')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-if Page.objects.filter(tag='about').first() is not None:
-    about_page_pk = Page.objects.filter(tag='about').first().pk
-    urlpatterns += [url(r'^about-me/$', RedirectView.as_view(
-        url=reverse_lazy('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'en', 'slug': ''})),
-        name='about-en')]
-    urlpatterns += [url(r'^ueber-mich/$', RedirectView.as_view(
-        url=reverse_lazy('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'de', 'slug': ''})),
-        name='about-de')]
-else:
-    urlpatterns += [url(r'^about-me/$', page_not_found, {'exception': Exception('Not Found')}, name='about-en')]
-    urlpatterns += [url(r'^ueber-mich/$', page_not_found, {'exception': Exception('Not Found')}, name='about-de')]
-
-if Page.objects.filter(tag='imprint').first() is not None:
-    impressum_page_pk = Page.objects.filter(tag='imprint').first().pk
-    urlpatterns += [url(r'^imprint/$', RedirectView.as_view(
-        url=reverse_lazy('py_monocle_cms:content', kwargs={'pk': impressum_page_pk, 'language': 'en', 'slug': ''})),
-        name='impressum-en')]
-    urlpatterns += [url(r'^impressum/$', RedirectView.as_view(
-        url=reverse_lazy('py_monocle_cms:content', kwargs={'pk': impressum_page_pk, 'language': 'de', 'slug': ''})),
-        name='impressum-de')]
-else:
-    urlpatterns += [url(r'^imprint/$', page_not_found, {'exception': Exception('Not Found')}, name='impressum-en')]
-    urlpatterns += [url(r'^impressum/$', page_not_found, {'exception': Exception('Not Found')}, name='impressum-de')]

@@ -12,9 +12,17 @@
 
         <div class="row" style="padding: 1em 0em 0em 1em">
             {% ifequal language 'de' %}
-                <a href="{% url 'py_monocle_cms:content' 'en' page.id '' %}"><b>Switch to</b> <img src="/py_monocle_cms/media/en_flag.png"></a>
+                {% if page.id %}
+                    <a href="{% url 'py_monocle_cms:content' 'en' page.id '' %}"><b>Switch to</b> <img src="/py_monocle_cms/media/en_flag.png"></a>
+                {% else %}
+                    <a href="{% url 'py_monocle_cms:index' 'en' %}"><b>Switch to</b> <img src="/py_monocle_cms/media/en_flag.png"></a>
+                {% endif %}
             {% else %}
-                <a href="{% url 'py_monocle_cms:content' 'de' page.id '' %}"><b>Wechsele zu</b> <img src="/py_monocle_cms/media/de_flag.png"></a>
+                {% if page.id %}
+                    <a href="{% url 'py_monocle_cms:content' 'de' page.id '' %}"><b>Wechsele zu</b> <img src="/py_monocle_cms/media/de_flag.png"></a>
+                {% else %}
+                    <a href="{% url 'py_monocle_cms:index' 'de' %}"><b>Wechsele zu</b> <img src="/py_monocle_cms/media/de_flag.png"></a>
+                {% endif %}
             {% endifequal %}
         </div>
 
@@ -45,9 +53,9 @@
 
         <div class="row"><h4>Meta<h4></div>
         {% ifequal language 'de' %}
-            <div class="row"><h5><a href="{% url 'py_monocle_cms:impressum-de' %}">Impressum</a></h5></div>
+            <div class="row"><h5><a href="{% url 'py_monocle_cms:imprint-de' %}">Impressum</a></h5></div>
         {% else %}
-            <div class="row"><h5><a href="{% url 'py_monocle_cms:impressum-en' %}">Imprint</a></h5></div>
+            <div class="row"><h5><a href="{% url 'py_monocle_cms:imprint-en' %}">Imprint</a></h5></div>
         {% endifequal %}
 
         {% if request.user.is_superuser %}
