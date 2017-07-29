@@ -32,12 +32,13 @@ class ImageUploadForm(forms.Form):
 class PageEditForm(ModelForm):
     class Meta:
         model = Page
-        fields = ['tag', 'created', 'admin_only', 'featured', 'name', 'headline', 'abstract', 'body']
+        fields = ['tag', 'created', 'admin_only', 'featured', 'front_page', 'name', 'headline', 'abstract', 'body']
 
     tag = forms.CharField(label='Tag', max_length=50, required=False)
     created = forms.DateField(label='Created', required=False)
-    admin_only = forms.BooleanField(label='Admin only', required=False)
-    featured = forms.BooleanField(label='Featured', required=False)
+    admin_only = forms.BooleanField(label='Only you (the admin) can see this page', required=False)
+    featured = forms.BooleanField(label='Show in Featured Projects list in sidebar', required=False)
+    front_page = forms.BooleanField(label='Show on front page', required=False)
     name = forms.CharField(label='Name', max_length=50, required=False)
     headline = forms.CharField(label='Headline (gets slugged)', max_length=100, required=False)
     abstract = forms.CharField(label='Abstract', widget=forms.Textarea, required=False)
@@ -56,6 +57,7 @@ class PageEditForm(ModelForm):
             'created',
             'admin_only',
             'featured',
+            'front_page',
             'name',
             'headline',
             'abstract',

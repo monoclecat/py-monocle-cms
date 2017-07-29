@@ -46,13 +46,13 @@ class TagView(RedirectView):
         if Page.objects.filter(tag=self.kwargs['tag']).first() is not None:
             about_page_pk = Page.objects.filter(tag=self.kwargs['tag']).first().pk
             if self.kwargs['language'] == 'de':
-                url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'de', 'slug': ''})
+                self.url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'de', 'slug': ''})
             else:
-                url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'en', 'slug': ''})
+                self.url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'en', 'slug': ''})
 
         else:
-            url = reverse('py_monocle_cms:404')
-        return url
+            self.url = reverse('py_monocle_cms:404')
+        return self.url
 
 
 class IndexView(ListView):
@@ -61,7 +61,7 @@ class IndexView(ListView):
     context_object_name = 'page'
 
     def get_queryset(self):
-        return Page.objects.all().exclude(admin_only=True).order_by('-created')
+        return Page.objects.all().exclude(admin_only=True, front_page=False).order_by('-created')
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context

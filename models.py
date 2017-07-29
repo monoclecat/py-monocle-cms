@@ -44,7 +44,7 @@ class Page(models.Model):
     created = models.DateField(default=timezone.now)
     admin_only = models.BooleanField(default=False)
     featured = models.BooleanField(default=False)
-    #front_page = models.BooleanField(default=True)
+    front_page = models.BooleanField(default=False)
     content = models.ManyToManyField(Content, default=None)
 
     def save(self, *args, **kwargs):
