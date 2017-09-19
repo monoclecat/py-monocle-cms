@@ -6,12 +6,26 @@ Electronics and Programming projects - Monoclecat
 {% endblock %}
 
 {% block main %}
+    <div class="tile">
+        <h1>Hello and welcome to my homepage!</h1>
+        <p>I'm an "electrical engineering & information technology" student and like to work on related projects
+            in my spare time. This blog is very much a show & tell of what I've been up to lately. </p>
+        <p>If you want to learn more about me and what I do, click on the "About Me" tab in the menu bar.
+            In the sidebar I put links to the projects I'm most proud of. I also have content on my Youtube channel,
+            my Instructables profile and my Github repository, so feel free to check them out too. </p>
+        <p>Below you will find my most recent posts. </p>
+    </div>
+
     {% for item in page %}
-        {% for content in item.content.all %}
-            {% ifequal content.language language %}
-                <h1 id="{{ item.pk }}">{{ content.headline }}</h1>
-                {{ content.body|from_markdown|safe }}
-            {% endifequal %}
-        {% endfor %}
+        <div class="tile">
+            <h2 id="{{ item.pk }}">{{ item.headline }}</h2>
+            {{ item.body|from_md_first_img|safe }}
+            <h4><small><span class="glyphicon glyphicon-send"></span> <b>{{ item.created }}</b></small></h4>
+            <p>{{ item.body|from_md_no_img|safe|truncatewords_html:200 }}
+                <a href="{% url 'py_monocle_cms:content' item.id item.slug %}">
+                    <button type="button" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-chevron-right"></span> Read on</button></a>
+                </p>
+        </div>
     {% endfor %}
 {%  endblock %}

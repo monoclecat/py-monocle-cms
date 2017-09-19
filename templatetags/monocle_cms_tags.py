@@ -8,4 +8,25 @@ register = template.Library()
 @register.filter
 def from_markdown(value):
     md = markdown.Markdown(extensions=[PageBuildingExtensions()])
-    return md.convert(value)
+    if value:
+        return md.convert(value)
+    else:
+        return ""
+
+@register.filter
+def from_md_no_img(value):
+    md = markdown.Markdown(extensions=[NoImgExtension()])
+    if value:
+        return md.convert(value)
+    else:
+        return ""
+
+@register.filter
+def from_md_first_img(value):
+    md = markdown.Markdown(extensions=[FirstImgExtension()])
+    if value:
+        return md.convert(value)
+    else:
+        return ""
+
+

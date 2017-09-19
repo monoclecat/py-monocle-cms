@@ -1,7 +1,7 @@
 # A simple content management system for Django
 
 This is the repository for py-monocle-cms, the content management system I use for my homepage, monoclecat.de.
-py-monocle-cms is meant for small, multilingual sites that are built as a blog with one user-account being the maintainer, 
+py-monocle-cms is meant for small blogs with one user-account being the maintainer, 
 having superuser rights. 
 
 # Features

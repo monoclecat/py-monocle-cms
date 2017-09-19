@@ -3,33 +3,18 @@
 {% load monocle_cms_tags %}
 
 {% block title %}
-{% for content in page.content.all %}
-    {% ifequal content.language language %}
-        Edit: {{ content.headline }} - Monoclecat
-    {% endifequal %}
-{% endfor %}
+        Edit: {{ page.headline }} - Monoclecat
 {% endblock %}
 
 {% block main %}
-    <h1>Edit page</h1>
+    <div class="tile">
+        <h1>Edit page</h1>
 
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-    <form class="bootstrap3" action="{% url 'py_monocle_cms:content_edit' language page.id slug %}" method="post">
-        <input type="submit" name="save" value="Save" class="btn btn-primary" id="submit-id-save">
-        {% for other_language in page.languages %}
-            {% ifnotequal other_language language %}
-                <input type="submit" class="btn btn-primary" name="save_{{ other_language }}" value="Save & go to language:{{ other_language }}" />
-            {% endifnotequal %}
-        {% endfor %}
-        {% crispy form %}
-    </form>
-
-    {% for content in page.content.all %}
-        {% ifequal content.language language %}
-            <h1>{{ content.headline }}</h1>
-            {{ content.body|from_markdown|safe }}
-        {% endifequal %}
-    {% endfor %}
+        <form class="bootstrap3" action="{% url 'py_monocle_cms:content_edit' page.id slug %}" method="post">
+            {% crispy form %}
+        </form>
+    </div>
 
 {%  endblock %}

@@ -6,20 +6,19 @@ from django.views.generic.edit import FormView
 from django.views.generic.base import RedirectView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.functions import Lower
+
 import logging
 
 from .models import Page, Image
 from .forms import PageEditForm, ImageUploadForm
 
 
-def get_featured_and_other(language, user_is_admin=False):
+def get_featured_and_other(user_is_admin=False):
     """
     Gives you the primary keys and page names of all Page objects, split up in two arrays: featured_pages and
     non_featured_pages. The sorting is done by the 'featured' field in the model Page.
     To keep out objects that are only meant to be seen by the admin, keep user_is_admin as False.
 
-    :param language: Desired language for the Page names
     :param user_is_admin: If True, Pages with 'admin_only' set to True will be included.
     :return: Array of two arrays containing two-element-arrays. Example: [ [[1, "Contact page"], [2, "Project #1"]], [[4, "Page #3"], [8, "Fun page"]] ]
     """
@@ -27,16 +26,14 @@ def get_featured_and_other(language, user_is_admin=False):
     non_featured_pages = []
 
     if user_is_admin:
-        perm_filtered_query = Page.objects.all()
+        perm_filtered_query = Page.objects.all().filter(tag="project")
     else:
-        perm_filtered_query = Page.objects.all().exclude(admin_only=True)
+        perm_filtered_query = Page.objects.all().filter(tag="project").exclude(admin_only=True)
 
     for page in perm_filtered_query.filter(featured=True):
-        content = page.content.get(language=language)
-        featured_pages.append([page.pk, content.name])
+        featured_pages.append([page.pk, page.name])
     for page in perm_filtered_query.filter(featured=False):
-        content = page.content.get(language=language)
-        non_featured_pages.append([page.pk, content.name])
+        non_featured_pages.append([page.pk, page.name])
 
     return [featured_pages, non_featured_pages]
 
@@ -45,11 +42,7 @@ class TagView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         if Page.objects.filter(tag=self.kwargs['tag']).first() is not None:
             about_page_pk = Page.objects.filter(tag=self.kwargs['tag']).first().pk
-            if self.kwargs['language'] == 'de':
-                self.url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'de', 'slug': ''})
-            else:
-                self.url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'language': 'en', 'slug': ''})
-
+            self.url = reverse('py_monocle_cms:content', kwargs={'pk': about_page_pk, 'slug': ''})
         else:
             self.url = reverse('py_monocle_cms:404')
         return self.url
@@ -61,15 +54,12 @@ class IndexView(ListView):
     context_object_name = 'page'
 
     def get_queryset(self):
-        return Page.objects.all().exclude(admin_only=True, front_page=False).order_by('-created')
+        return Page.objects.all().exclude(admin_only=True).exclude(front_page=False).order_by('-created')
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['language'] = self.kwargs['language']
-
-        context['featured_pages'], context['other_pages'] = get_featured_and_other(self.kwargs['language'],
-                                                                                         self.request.user.is_superuser)
+        context['featured_pages'], context['other_pages'] = get_featured_and_other(self.request.user.is_superuser)
         return context
 
 
@@ -106,9 +96,9 @@ class ImageUploadView(LoginRequiredMixin, FormView):
             sorting_params[0] = 'uploaded'
 
         if sorting_params[1] == 'asc':
-            images = Image.objects.all().order_by(Lower(sorting_params[0]).asc())
+            images = Image.objects.all().order_by(sorting_params[0])
         else:
-            images = Image.objects.all().order_by(Lower(sorting_params[0]).desc())
+            images = Image.objects.all().order_by("-"+sorting_params[0])
 
         context['images'] = images
         context['sort'] = sort
@@ -129,12 +119,12 @@ class ImageUploadView(LoginRequiredMixin, FormView):
             files = request.FILES.getlist('image_file_field')
             if form.is_valid():
                 for f in files:
+
                     Image.objects.create(file=f, tag=request.POST['tag'])
                 return self.form_valid(form)
             else:
                 return self.form_invalid(form)
         return HttpResponseRedirect(reverse('py_monocle_cms:image_upload'))
-
 
 
 class ContentView(DetailView):
@@ -152,9 +142,8 @@ class ContentView(DetailView):
         # Call the base implementation first to get a context
         context = super(ContentView, self).get_context_data(**kwargs)
 
-        context['language'] = self.kwargs['language']
         context['featured_pages'], context['other_pages'] = \
-            get_featured_and_other(self.kwargs['language'], self.request.user.is_superuser)
+            get_featured_and_other(self.request.user.is_superuser)
         return context
 
     def get(self, request, *args, **kwargs):
@@ -164,9 +153,8 @@ class ContentView(DetailView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
 
-        if self.kwargs['slug'] != context['page'].content.get(language=context['language']).slug():
-            # No content was found under the given language or slug was wrong
-            return redirect(context['page'].get_absolute_url(self.kwargs['language']))
+        if self.kwargs['slug'] != context['page'].slug():
+            return redirect(context['page'].get_absolute_url())
         return self.render_to_response(context)
 
 
@@ -177,18 +165,15 @@ class ContentEditView(LoginRequiredMixin, FormView, ContentView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
+
         context = ContentView.get_context_data(self, object=self.object)
-        content = context['page'].content.get(language=context['language'])
 
-        self.initial = {'tag': context['page'].tag, 'created': context['page'].created,
-                        'admin_only': context['page'].admin_only,
-                        'featured': context['page'].featured, 'name': content.name,
-                        'headline': content.headline, 'abstract': content.abstract, 'body': content.body}
+        form = PageEditForm(instance=self.object)
 
-        context = {**context, **FormView.get_context_data(self, **kwargs)}
+        context['form'] = form
 
-        if self.kwargs['slug'] != content.slug():
-            return redirect(context['page'].get_absolute_url(context['language'], True))
+        if self.kwargs['slug'] != context['page'].slug():
+            return redirect(context['page'].get_absolute_url(True))
 
         return self.render_to_response(context)
 
@@ -197,27 +182,17 @@ class ContentEditView(LoginRequiredMixin, FormView, ContentView):
         if form.is_valid():
             page = Page.objects.get(pk=self.kwargs['pk'])
             form = PageEditForm(request.POST, instance=page)
-            return self.form_valid(form)
+            if 'save_done_editing' in request.POST:
+                edit_mode = False
+            else:
+                edit_mode = True
+            return self.form_valid(form, edit_mode)
         else:
             return self.form_invalid(form)
 
-    def form_valid(self, form):
+    def form_valid(self, form, edit_mode=True):
         self.object = form.save()
-
-        content = self.object.content.get(language=self.kwargs['language'])
-
-        content.name = self.request.POST['name']
-        content.headline = self.request.POST['headline']
-        content.abstract = self.request.POST['abstract']
-        content.body = self.request.POST['body']
-        content.save()
-
-        for language in Page.languages:
-            if 'save_'+language in self.request.POST:
-                # Change language keyword so success_url is constructed according to users wsh
-                self.kwargs['language'] = language
-
-        self.success_url = self.object.get_absolute_url(self.kwargs['language'], True)
+        self.success_url = self.object.get_absolute_url(edit_mode)
         return super(ContentEditView, self).form_valid(form)
 
 

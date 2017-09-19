@@ -2,23 +2,20 @@
 {% load monocle_cms_tags %}
 
 {% block title %}
-{% for content in page.content.all %}
-    {% ifequal content.language language %}
-        {{ content.headline }} - Monoclecat
-    {% endifequal %}
-{% endfor %}
+     {{ page.headline }} - Monoclecat
 {% endblock %}
 
 {% block main %}
-    {% if request.user.is_superuser %}
-        <a href="/edit{{ request.path }}" class="btn btn-primary btn-lg" role="button" target="_blank">Edit</a>
-    {% endif %}
-
-    {% for content in page.content.all %}
-        {% ifequal content.language language %}
-            <h1>{{ content.headline }}</h1>
-            {{ content.body|from_markdown|safe }}
-        {% endifequal %}
-    {% endfor %}
-
+    <div class="tile" itemscope itemtype="http://schema.org/BlogPosting">
+        <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://google.com/article"/>
+        <div itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <meta itemprop="name" content="Andrew Delay" /></div>
+        <meta itemprop="datePublished" content="{{ page.created }}"/>
+        <meta itemprop="dateModified" content="{{ page.created }}"/>
+        {% if request.user.is_superuser %}
+            <a href="/edit{{ request.path }}" class="btn btn-primary btn-lg" role="button">Edit</a>
+        {% endif %}
+        <h1 itemprop="headline">{{ page.headline }}</h1>
+        {{ page.body|from_markdown|safe }}
+    </div>
 {%  endblock %}
